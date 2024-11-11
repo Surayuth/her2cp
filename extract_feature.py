@@ -4,7 +4,7 @@ import numpy as np
 from PIL import Image
 from glob import glob
 from pathlib import Path
-from pillow_heif import open_heif
+import pyheif
 from numpy.typing import NDArray
 from skimage.feature import local_binary_pattern, graycomatrix, graycoprops
 from skimage.measure import shannon_entropy
@@ -18,12 +18,24 @@ def read_image(path: str, scale: float = 1/4) -> NDArray:
     path: path to image
     scale: resized scale (default: 0.25)
     """
-    # separated flow for 
+    # separated flow for heic
     if path.split(".")[-1].lower() == "heic":
-        img = open_heif(path, convert_hdr_to_8bit=True)
+        # Read HEIC file
+        heif_file = pyheif.read(path)
+        # Convert to PIL Image
+        img = Image.frombytes(
+            heif_file.mode, 
+            heif_file.size, 
+            heif_file.data,
+            "raw",
+            heif_file.mode,
+            heif_file.stride,
+        )
+        img = np.asanyarray(img)
     else:
         img = Image.open(path)
-    img = np.asanyarray(img)
+        img = np.asanyarray(img)
+    
     H, W = img.shape[:-1]
     new_H = int(H * scale)
     new_W = int(W * scale)
