@@ -39,7 +39,7 @@ pip install -r requirements.txt
 ## Data Preparation
 
 1. Download dataset (6GB):
-- Download [dataset file](https://drive.google.com/file/d/1KeKptikuHuCNVXRhfJueBlj67LJVbcIw/view?usp=sharing)
+- Download [dataset file](xxx)
 - Save to the project root directory
 
 2. Extract dataset:
